@@ -1,0 +1,84 @@
+cells = "         "  # input("Enter cells: ").lstrip('> ')
+
+valid_inputs = ['1', '2', '3']
+valid_symbols = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+valid_num = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+flag = True
+new = []
+next_mark = 'X'
+win_flag = False
+count = 0
+
+
+def print_table():
+    print("---------")
+    print("| " + new[0][2] + " " + new[1][2] + " " + new[2][2] + " |")
+    print("| " + new[0][1] + " " + new[1][1] + " " + new[2][1] + " |")
+    print("| " + new[0][0] + " " + new[1][0] + " " + new[2][0] + " |")
+    print("---------")
+
+
+coordinated_cells = [[cells[6], cells[3], cells[0]],
+                     [cells[7], cells[4], cells[1]],
+                     [cells[8], cells[5], cells[2]]]
+
+for i in range(3):
+    new.append([])
+    for j in range(3):
+        new[i].append([])
+        new[i][j] = coordinated_cells[i][j]
+
+print_table() # print empty game table
+
+
+while count < 10:
+    coordination = input("Enter the coordinates(x y): >").split()
+    if len(coordination) != 2:
+        print("You need two coordinates!")
+        continue
+    x = coordination[0]
+    y = coordination[1]
+    count += 1
+
+    # Analyze move
+    if x not in valid_num or y not in valid_num:
+        print("You should enter numbers!")
+    elif x not in valid_inputs or y not in valid_inputs:
+        print("Coordinates should be from 1 to 3!")
+    elif new[int(x) - 1][int(y) - 1] != ' ':
+        print("This cell is occupied! Choose another one!")
+    else:  
+        new[int(x) - 1][int(y) - 1] = next_mark
+        if next_mark == 'X':
+            next_mark = 'O'
+        else:
+            next_mark = 'X'
+        count += 1
+        
+        win_case = [[new[0][2], new[1][2], new[2][2]],
+                    [new[0][1], new[1][1], new[2][1]],
+                    [new[0][0], new[1][0], new[2][0]],
+                    [new[0][2], new[0][1], new[0][0]],
+                    [new[1][2], new[1][1], new[1][0]],
+                    [new[2][2], new[2][1], new[2][0]],
+                    [new[0][2], new[1][1], new[2][0]],
+                    [new[0][0], new[1][1], new[2][2]]]
+
+        print_table()
+        
+        
+        # Checking the winning case
+        for case in win_case:
+            if case == ['X', 'X', 'X']:
+                win_flag = True
+                print("X wins")
+                exit()
+            elif case == ['O', 'O', 'O']:
+                win_flag = True
+                print("O wins")
+                exit()
+
+        if count == 9 and (win_flag == False):
+            print("Draw")
+            exit()
+ 
